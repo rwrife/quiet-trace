@@ -1,6 +1,6 @@
 # Quiet Trace device/app protocol draft
 
-Status: design contract for issue-driven implementation. Endpoint names and schemas may change before v1; no running server is claimed.
+Status: foundation v1 contract implemented for review in issue #1. No running server, selected hardware, or network security validation is claimed.
 
 ## Principles
 
@@ -51,22 +51,30 @@ Illustrative shape:
   "schema": "quiet-trace/aggregate/v1",
   "sequence": 1234,
   "interval_start": "2026-08-27T05:00:00Z",
+  "monotonic_start_ms": 74040000,
   "duration_ms": 60000,
-  "level_eq_db": 47.2,
-  "peak_window_db": 61.0,
-  "histogram_counts": [2, 18, 33, 7],
+  "level_eq_dbfs": -38.5,
+  "peak_125ms_dbfs": -21.25,
+  "histogram_counts": [0, 0, 8, 64, 192, 152, 56, 8, 0, 0],
   "calibration": {
     "state": "uncalibrated",
     "offset_db": null,
     "calibrated_at": null,
-    "method": null
+    "method": null,
+    "reference_instrument": null,
+    "reference_placement": null,
+    "reference_source": null,
+    "reference_duration_s": null,
+    "firmware_version": null,
+    "hardware_revision": null
   },
+  "clock_quality": "synced",
   "quality_flags": ["uncalibrated"],
   "session_id": "office-morning"
 }
 ```
 
-Metric names are provisional. Firmware/UI must not present uncalibrated numeric values as certified dB(A), and must document weighting/window definitions before release. Histogram edges are configuration metadata, not a spectrum.
+`level_eq_dbfs` is the energy-equivalent relative digital level over the complete minute. `peak_125ms_dbfs` is the maximum complete non-overlapping 125 ms weighted window. The ten histogram bins use the frozen edges in [`metrics.md`](metrics.md), discard temporal order, and are not a spectrum. Uncalibrated numeric values must never be presented as dB SPL, dB(A), certified, or safety-relevant. The canonical machine-readable shape is [`schemas/aggregate-record-v1.schema.json`](schemas/aggregate-record-v1.schema.json); standard JSON Schema validation must be followed by one of the required semantic validators documented in [`schemas/README.md`](schemas/README.md).
 
 ## Proposed endpoints
 
@@ -113,7 +121,7 @@ Errors return a stable code, safe message, request correlation ID, and retry gui
 
 ## Compatibility
 
-- Additive fields are ignored by older readers.
+- The v1 aggregate record is a closed allowlist: unknown fields are rejected. Adding a field requires a reviewed schema revision, privacy analysis, and matching TypeScript/C++ validation before producers emit it.
 - Breaking changes increment the schema path/version.
 - Exports carry firmware version, schema version, calibration metadata, and clock-quality semantics.
 - Restore validates schema, size, checksums, ranges, and capacity before changing live data.
