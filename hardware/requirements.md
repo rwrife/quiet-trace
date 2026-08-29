@@ -1,6 +1,13 @@
 # Quiet Trace hardware requirements
 
-Status: draft requirements for validation in backlog issue #1. A requirement is not test evidence.
+Status: foundation requirements baseline proposed for review in backlog issue #1. A requirement is not test evidence. Exact electrical values and package constraints that depend on selected MPNs remain blocked on issue #2 manufacturer-datasheet review.
+
+Architecture, metric, privacy, and evidence definitions are frozen in:
+
+- [`docs/adr/0001-mvp-architecture.md`](../docs/adr/0001-mvp-architecture.md)
+- [`docs/metrics.md`](../docs/metrics.md)
+- [`docs/privacy-threat-model.md`](../docs/privacy-threat-model.md)
+- [`docs/verification-matrix.md`](../docs/verification-matrix.md)
 
 ## Electrical
 
@@ -62,3 +69,11 @@ Status: draft requirements for validation in backlog issue #1. A requirement is 
 | B-02 | Record Manufacturer and exact MPN for every schematic part; validate package, ratings, pinout, lifecycle, and availability. | Schematic property and datasheet audit. |
 | B-03 | Track enclosure, cable, fasteners, certified USB supply, and calibration/reference equipment separately as non-schematic items. | `bom/bom.csv` and non-schematic BOM review. |
 | B-04 | Prefer hand-assemblable modules/parts for revision A and document any JLCPCB extended/hand-solder constraints without assuming availability. | Assembly/BOM review. |
+
+## Issue-1 resolution record
+
+- USB 5 V SELV, indoor/dry use, no battery/mains/actuator, local-first operation, USB recovery, privacy exclusions, accessibility baseline, and the USD 35–60 target / USD 75 ceiling are retained unchanged in this proposal.
+- Default aggregate persistence is frozen at no more than one 60-second record per minute with a seven-day/10,080-record minimum capacity target; see the metric contract for bounds.
+- “Calibrated” is not a default state. Only a stored, dated, documented reference comparison may create the `reference_adjusted` state, which still carries no IEC/ANSI or safety claim.
+- Exact controller/module, microphone, USB protection, rail values, timing, RF keepout, acoustic port, package, lifecycle, and availability remain intentionally unresolved until issue #2 compares manufacturer datasheets and suppliers. No candidate MPN or cost in the preliminary BOM is validated by this baseline.
+- The ESP-IDF and dashboard scaffolds contain no production fake sensor path. Synthetic data is explicit fixture-only evidence.

@@ -90,7 +90,7 @@ Prototype planning target: **USD 35–60**, including electronics, simple enclos
 
 ## Current status and milestones
 
-**Status: documentation and backlog scaffold only.** No application, firmware, schematic, PCB, validated BOM, ERC/DRC result, calibration result, fabricated board, or physical test is claimed yet.
+**Status: issue-1 foundation implementation proposed for review.** The repository now contains architecture/privacy/metric contracts, an exact-lock TypeScript/Vite dashboard scaffold, a host-testable aggregate domain contract, an ESP-IDF v6.1 ESP32-S3 target scaffold, and CI. Fixture and build results are static/synthetic evidence only. No exact controller or microphone MPN, schematic, PCB, validated BOM, calibration, fabricated board, or physical test is claimed.
 
 1. Freeze measurable requirements and privacy threat model.
 2. Validate controller/microphone/protection choices from manufacturer datasheets.
@@ -104,24 +104,32 @@ See [PLAN.md](PLAN.md), [hardware/requirements.md](hardware/requirements.md), an
 
 ## Development quickstart
 
-The implementation has not been created yet. The intended toolchain is:
-
-- KiCad 9+ for editable hardware sources and ERC/DRC.
-- ESP-IDF (pinned version to be selected) for ESP32-S3 firmware.
-- TypeScript + Vite for the static dashboard bundled into firmware.
-- Python/pytest or host-native C++ tests for deterministic DSP fixtures where practical.
-
-Once issue #1 establishes the repository skeleton, expected commands will resemble:
+Pinned versions and setup details are in [docs/toolchains.md](docs/toolchains.md).
 
 ```bash
+# Dashboard: exact lockfile, static checks, tests, and production bundle
+cd app
+npm ci
+npm run format:check
+npm run lint
+npm run typecheck
+npm run test:run
+npm run build
+
+# Host-testable firmware domain contract
+cd ..
+cmake -S firmware/host_tests -B /tmp/quiet-trace-host-tests \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build /tmp/quiet-trace-host-tests --parallel
+ctest --test-dir /tmp/quiet-trace-host-tests --output-on-failure
+
+# ESP-IDF v6.1 target scaffold (after exporting the pinned IDF environment)
+cd firmware
+idf.py set-target esp32s3
 idf.py build
-idf.py flash monitor
-npm ci --prefix app
-npm test --prefix app
-npm run build --prefix app
 ```
 
-These are planned interfaces, not successful build evidence. Exact setup, versions, and commands will be committed with the implementation.
+The dashboard’s synthetic view is opt-in at `/?fixture=1` and visibly marked as fixture-only. The default route does not fabricate sensor data. Target flashing, microphone behavior, calibration, and bench results remain unverified until the exact hardware is selected and present.
 
 ## Licensing plan
 

@@ -1,0 +1,27 @@
+import type { AggregateRecord } from "../contracts/aggregate-record";
+
+export const aggregateFixture: AggregateRecord = {
+  schema: "quiet-trace/aggregate/v1",
+  sequence: 42,
+  interval_start: null,
+  monotonic_start_ms: 2_520_000,
+  duration_ms: 60_000,
+  level_eq_dbfs: -38.5,
+  peak_125ms_dbfs: -21.25,
+  histogram_counts: [0, 0, 8, 64, 192, 152, 56, 8, 0, 0],
+  calibration: {
+    state: "uncalibrated",
+    offset_db: null,
+    calibrated_at: null,
+    method: null,
+    reference_instrument: null,
+    reference_placement: null,
+    reference_source: null,
+    reference_duration_s: null,
+    firmware_version: null,
+    hardware_revision: null,
+  },
+  clock_quality: "monotonic_only",
+  quality_flags: ["uncalibrated", "wall_time_unknown"],
+  session_id: "fixture-office",
+};

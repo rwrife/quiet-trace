@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dashboard:
+    name: Dashboard format, lint, type, test, build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: app/.nvmrc
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm audit --audit-level=high
+        working-directory: app
+      - run: npm run format:check
+        working-directory: app
+      - run: npm run lint
+        working-directory: app
+      - run: npm run typecheck
+        working-directory: app
+      - run: npm run test:run
+        working-directory: app
+      - run: npm run build
+        working-directory: app
+
+  firmware-host:
+    name: Firmware host contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Format, build, and test in pinned host toolchain
+        run: |
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/workspace:ro" \
+            -w /workspace \
+            silkeh/clang@sha256:10854c9a1b4b8fa550b7c2261d298d9d078f5b89aebd50e7576d8599419cbbfd \
+            bash -euxo pipefail -c '
+              clang-format --version | grep -F "version 20.1.8"
+              cmake --version | grep -F "cmake version 3.25.1"
+              clang++ --version | grep -F "clang version 20.1.8"
+              clang-format --dry-run --Werror \
+                firmware/components/audio_source/include/quiet_trace/audio_source.hpp \
+                firmware/components/domain/aggregate_contract.cpp \
+                firmware/components/domain/include/quiet_trace/aggregate_contract.hpp \
+                firmware/host_tests/aggregate_contract_test.cpp \
+                firmware/host_tests/support/synthetic_sample_source.hpp \
+                firmware/host_tests/synthetic_source_test.cpp \
+                firmware/main/quiet_trace_main.cpp
+              cmake -S firmware/host_tests -B /tmp/quiet-trace-host-tests \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_CXX_COMPILER=clang++
+              cmake --build /tmp/quiet-trace-host-tests --parallel
+              ctest --test-dir /tmp/quiet-trace-host-tests --output-on-failure
+            '
+
+  firmware-target:
+    name: ESP-IDF v6.1 ESP32-S3 build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    container: espressif/idf@sha256:81893c71bb5e570088901f21def8684c25cd2a9020281bd01b843a7655edb18c
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Verify toolchain and build target scaffold
+        working-directory: firmware
+        run: |
+          /opt/esp/entrypoint.sh bash -lc '
+            set -e
+            version="$(idf.py --version)"
+            echo "$version"
+            test "$version" = "ESP-IDF v6.1"
+            idf.py set-target esp32s3
+            idf.py build
+          '

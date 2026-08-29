@@ -55,6 +55,8 @@ hardware/mechanical/     enclosure source and drawings
 
 ### M0 — Requirements and proof strategy
 
+**Foundation baseline implemented for review in issue #1:** architecture choices, aggregate terminology, privacy invariants, retention/clock/calibration states, and evidence classes are documented in `docs/adr/0001-mvp-architecture.md`, `docs/metrics.md`, `docs/privacy-threat-model.md`, and `docs/verification-matrix.md`. Physical/electrical details that require exact MPNs remain gated on M1 rather than guessed.
+
 - Freeze metric definitions, privacy invariants, retention limits, clock-quality states, safety language, and cost target.
 - Define synthetic DSP vectors and an optional reference-meter comparison procedure.
 - Decide which claims can be supported by static analysis, simulation, bench measurement, or field observation.
