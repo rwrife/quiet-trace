@@ -41,7 +41,12 @@ test-results/
 # BOM and analysis working files
 bom/orders/
 datasheets/
+analysis/*.json
 analysis/*/*.json
+hardware/kicad/*.net
+hardware/kicad/*.xml
+**/__pycache__/
+*.pyc
 *.bak
 
 # Fabrication/release outputs are generated and attached to releases
