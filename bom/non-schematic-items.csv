@@ -1,0 +1,7 @@
+Item,Quantity,Status,Estimated Cost USD,Notes
+Enclosure,1,TBD,TBD,"Select after PCB/mechanical issue #3; must preserve microphone acoustic port and ESP32 antenna clearance."
+USB-C cable,1,TBD,TBD,"USB 2.0 data-capable cable required for power, programming, recovery, and aggregate export."
+USB 5 V supply,1,User-provided certified supply,TBD,"Use a certified SELV USB supply only; no mains circuitry is present on Quiet Trace."
+PCB fasteners/standoffs,1 set,TBD,TBD,"Select with enclosure and board mounting-hole geometry in issue #3."
+Reference sound-level meter access,1 session,Not purchased by default,TBD,"Required for the documented reference comparison in calibration issue #6; fixture/synthetic results do not constitute calibration."
+Acoustic reference source or calibrator access,1 session,TBD,TBD,"Optional depending on calibration method; no compliance claim is permitted."

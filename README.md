@@ -66,19 +66,19 @@ The dashboard requires local-network access. Wi-Fi credentials are stored only o
 
 ## Hardware direction
 
-The provisional architecture uses a Seeed Studio XIAO ESP32S3-class module, a datasheet-validated digital MEMS microphone or breakout, non-color-only LED status, a physical setup/mark button, and USB-C 5 V power. A custom carrier PCB will provide mounting, signal integrity, microphone acoustic clearance, protection, test access, and optional expansion. Exact manufacturer part numbers, package choices, costs, lifecycle, and availability are **not yet validated**.
+Revision A selects an Espressif `ESP32-S3-WROOM-1-N8R8` module and TDK InvenSense `ICS-43434` I²S microphone, with USB-C 5 V power/protection, non-color-only LED status, physical RESET and SETUP/MARK controls, recovery header, and test access. Exact selected parts, pin/package checks, acoustic constraints, the LDO thermal bound, and point-in-time sourcing evidence are documented in [hardware/parts-selection.md](hardware/parts-selection.md). Stock, prices, and formal lifecycle status still require a pre-order procurement check.
 
-Planned editable sources are:
+Current editable sources are:
 
 ```text
 hardware/kicad/quiet-trace.kicad_pro
 hardware/kicad/quiet-trace.kicad_sch
-hardware/kicad/quiet-trace.kicad_pcb
+hardware/kicad/quiet-trace.kicad_pcb    # planned in issue #3; not present yet
 ```
 
-PDFs and renders may supplement these files but will never replace them. Final BOM data belongs in KiCad schematic symbol properties (`Manufacturer`, `MPN`, supplier fields, and notes) and will be exported to tracked `bom/bom.csv`. The current `bom/preliminary-bom.csv` is planning input only.
+PDFs and renders may supplement these files but will never replace them. Final BOM data lives in KiCad schematic symbol properties (`Manufacturer`, `MPN`, supplier fields, and notes) and is exported to tracked [`bom/bom.csv`](bom/bom.csv). `bom/preliminary-bom.csv` remains planning input only.
 
-Prototype planning target: **USD 35–60**, including electronics, simple enclosure, cable, and ordinary fasteners but excluding a phone/computer, tools, and a reference sound meter. This is a target rather than a live quote; every price and availability entry remains TBD until validated.
+Prototype planning target: **USD 35–60**, including electronics, simple enclosure, cable, and ordinary fasteners but excluding a phone/computer, tools, and a reference sound meter. This is a target rather than a live quote; the tracked BOM preserves `TBD` wherever current unit pricing was not actually observed, and all availability must be rechecked before ordering.
 
 ## Safety limits
 
@@ -90,7 +90,7 @@ Prototype planning target: **USD 35–60**, including electronics, simple enclos
 
 ## Current status and milestones
 
-**Status: issue-1 foundation implementation proposed for review.** The repository now contains architecture/privacy/metric contracts, an exact-lock TypeScript/Vite dashboard scaffold, a host-testable aggregate domain contract, an ESP-IDF v6.1 ESP32-S3 target scaffold, and CI. Fixture and build results are static/synthetic evidence only. No exact controller or microphone MPN, schematic, PCB, validated BOM, calibration, fabricated board, or physical test is claimed.
+**Status: issue-2 schematic and source-backed BOM implemented for review.** The repository contains the architecture/privacy/metric contracts, dashboard and ESP-IDF scaffolds, an editable KiCad project/schematic, selected exact controller and microphone MPNs, and a schematic-exported BOM. KiCad 9 ERC passes with zero violations. No PCB, enclosure, calibration, fabricated board, bench measurement, or physical test is claimed.
 
 1. Freeze measurable requirements and privacy threat model.
 2. Validate controller/microphone/protection choices from manufacturer datasheets.
