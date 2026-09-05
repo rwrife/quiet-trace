@@ -1,0 +1,17 @@
+(version 1)
+
+# Revision-A routing constraints. These are conservative for ordinary low-cost
+# two-layer FR-4 and do not assert controlled-impedance fabrication.
+(rule "Raw USB power routing"
+  (condition "A.NetName == 'VBUS_RAW'")
+  (constraint track_width (min 0.4mm) (max 0.45mm)))
+
+(rule "USB data routing"
+  (condition "A.NetName == 'USB_D_P' || A.NetName == 'USB_D_N' || A.NetName == 'USB_D_P_ESD' || A.NetName == 'USB_D_N_ESD' || A.NetName == 'USB_D_P_CONN' || A.NetName == 'USB_D_N_CONN'")
+  (constraint track_width (min 0.15mm) (max 0.25mm))
+  (constraint clearance (min 0.15mm)))
+
+(rule "Digital microphone routing"
+  (condition "A.NetName == 'MIC_BCLK' || A.NetName == 'MIC_WS' || A.NetName == 'MIC_SD'")
+  (constraint track_width (min 0.15mm) (max 0.25mm))
+  (constraint clearance (min 0.2mm)))

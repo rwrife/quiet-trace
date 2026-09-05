@@ -1,0 +1,31 @@
+** Drc report for quiet-trace.kicad_pcb **
+** Created on 2026-09-05T01:30:53+0000 **
+** Report includes: Errors, Warnings **
+
+** Found 4 DRC violations **
+[solder_mask_bridge]: Rear solder mask aperture bridges items with different nets
+    Rule: board setup solder mask min width; error
+    @(1.3200 mm, 21.6000 mm): Track [VBUS_RAW] on B.Cu, length 3.6000 mm
+    @(1.8950 mm, 19.6800 mm): PTH pad S1 [GND] of J1
+[courtyards_overlap]: Courtyards overlap
+    Rule: board setup constraints courtyard; error
+    @(28.0000 mm, 20.0000 mm): Footprint R5
+    @(25.5000 mm, 17.0000 mm): Footprint U2
+[shorting_items]: Items shorting two nets (nets GND and VBUS_RAW)
+    Local override; error
+    @(1.8950 mm, 19.6800 mm): PTH pad S1 [GND] of J1
+    @(1.3200 mm, 21.6000 mm): Track [VBUS_RAW] on B.Cu, length 3.6000 mm
+[clearance]: Clearance violation (zone clearance 0.3000 mm; actual 0.0000 mm)
+    Local override; error
+    @(1.3200 mm, 21.6000 mm): Track [VBUS_RAW] on B.Cu, length 3.6000 mm
+    @(0.2000 mm, 0.2000 mm): Zone [GND] on B.Cu, priority 0
+
+** Found 1 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(0.2000 mm, 0.2000 mm): Zone [GND] on F.Cu, priority 0
+    @(0.2000 mm, 0.2000 mm): Zone [GND] on F.Cu, priority 0
+
+** Found 0 Footprint errors **
+
+** End of Report **
