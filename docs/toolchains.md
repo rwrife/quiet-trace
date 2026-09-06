@@ -46,10 +46,33 @@ idf.py set-target esp32s3
 idf.py build
 ```
 
-Flash/monitor commands are intentionally not evidence until exact hardware is selected and attached:
+Flash/monitor commands (still not bench evidence until issue #6):
 
 ```bash
 idf.py -p "$ESPPORT" flash monitor
+```
+
+Factory erase and recovery entry points:
+
+```bash
+# wipe flash for recovery or ownership transfer
+idf.py -p "$ESPPORT" erase-flash
+
+# recovery flash: hold BOOT, tap RESET, then run
+idf.py -p "$ESPPORT" flash monitor
+```
+
+USB serial command surface for setup/export/erase/recovery (line-oriented, aggregate-only):
+
+```text
+setup begin
+time set <token> 2026-09-06T12:00:00Z
+wifi set <token> <ssid> <password>
+export json|csv
+erase records <token>
+erase factory <token>
+recover store <token>
+reboot recovery <token>
 ```
 
 ## Firmware host tests

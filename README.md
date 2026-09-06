@@ -73,7 +73,7 @@ Current editable sources are:
 ```text
 hardware/kicad/quiet-trace.kicad_pro
 hardware/kicad/quiet-trace.kicad_sch
-hardware/kicad/quiet-trace.kicad_pcb    # planned in issue #3; not present yet
+hardware/kicad/quiet-trace.kicad_pcb
 ```
 
 PDFs and renders may supplement these files but will never replace them. Final BOM data lives in KiCad schematic symbol properties (`Manufacturer`, `MPN`, supplier fields, and notes) and is exported to tracked [`bom/bom.csv`](bom/bom.csv). `bom/preliminary-bom.csv` remains planning input only.
@@ -90,7 +90,7 @@ Prototype planning target: **USD 35–60**, including electronics, simple enclos
 
 ## Current status and milestones
 
-**Status: issue-2 schematic and source-backed BOM implemented for review.** The repository contains the architecture/privacy/metric contracts, dashboard and ESP-IDF scaffolds, an editable KiCad project/schematic, selected exact controller and microphone MPNs, and a schematic-exported BOM. KiCad 9 ERC passes with zero violations. No PCB, enclosure, calibration, fabricated board, bench measurement, or physical test is claimed.
+**Status: issue-4 aggregate-only firmware vertical slice implemented for review.** The repository now contains the architecture/privacy/metric contracts, selected schematic/BOM, PCB/mechanical draft, and host-tested firmware domain contracts for acquisition, aggregation, storage recovery, setup/USB control paths, and aggregate/status protocol rendering. Dashboard end-to-end implementation and physical integration evidence remain open in issues #5 and #6. No certification, safety, legal, or bench-calibrated claim is made.
 
 1. Freeze measurable requirements and privacy threat model.
 2. Validate controller/microphone/protection choices from manufacturer datasheets.

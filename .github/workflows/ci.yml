@@ -58,8 +58,17 @@ jobs:
               clang-format --dry-run --Werror \
                 firmware/components/audio_source/include/quiet_trace/audio_source.hpp \
                 firmware/components/domain/aggregate_contract.cpp \
+                firmware/components/domain/acquisition_pipeline.cpp \
+                firmware/components/domain/record_ring.cpp \
+                firmware/components/domain/control_plane.cpp \
                 firmware/components/domain/include/quiet_trace/aggregate_contract.hpp \
+                firmware/components/domain/include/quiet_trace/acquisition_pipeline.hpp \
+                firmware/components/domain/include/quiet_trace/record_ring.hpp \
+                firmware/components/domain/include/quiet_trace/control_plane.hpp \
                 firmware/host_tests/aggregate_contract_test.cpp \
+                firmware/host_tests/acquisition_pipeline_test.cpp \
+                firmware/host_tests/record_ring_test.cpp \
+                firmware/host_tests/control_plane_test.cpp \
                 firmware/host_tests/support/synthetic_sample_source.hpp \
                 firmware/host_tests/synthetic_source_test.cpp \
                 firmware/main/quiet_trace_main.cpp
