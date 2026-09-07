@@ -15,7 +15,10 @@
     "lint": "eslint .",
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "tsc -b --pretty false"
+    "test:accessibility": "vitest run tests/accessibility-contract.test.ts",
+    "typecheck": "tsc -b --pretty false",
+    "check:bundle-size": "node ./scripts/check-bundle-size.mjs",
+    "check:firmware-contract": "node ./scripts/check-firmware-contract.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

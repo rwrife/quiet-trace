@@ -13,4 +13,14 @@ export default tseslint.config(
       "no-undef": "off",
     },
   },
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        URL: "readonly",
+        console: "readonly",
+        process: "readonly",
+      },
+    },
+  },
 );

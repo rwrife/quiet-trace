@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quiet-trace.local/schemas/status-v1.schema.json",
+  "title": "Quiet Trace status payload v1",
+  "description": "Aggregate-only device status summary for dashboard and USB recovery surfaces.",
+  "type": "object",
+  "required": [
+    "schema",
+    "records",
+    "generation",
+    "setup_active",
+    "calibration_state",
+    "clock_quality",
+    "fixture_mode",
+    "counters"
+  ],
+  "properties": {
+    "schema": { "const": "quiet-trace/status/v1" },
+    "records": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "setup_active": { "type": "boolean" },
+    "calibration_state": {
+      "enum": ["uncalibrated", "reference_adjusted", "invalid"]
+    },
+    "clock_quality": {
+      "enum": ["unknown", "monotonic_only", "host_set", "synced"]
+    },
+    "fixture_mode": { "type": "boolean" },
+    "counters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clipping_samples",
+        "framing_error_samples",
+        "acquisition_overruns",
+        "dropped_intervals",
+        "clock_uncertain_intervals",
+        "valid_samples",
+        "dropped_samples"
+      ],
+      "properties": {
+        "clipping_samples": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "framing_error_samples": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "acquisition_overruns": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "dropped_intervals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "clock_uncertain_intervals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "valid_samples": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "dropped_samples": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
