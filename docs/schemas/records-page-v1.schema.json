@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quiet-trace.local/schemas/records-page-v1.schema.json",
+  "title": "Quiet Trace records page payload v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "records",
+    "paging",
+    "generated_at",
+    "clock_quality",
+    "quality_flags"
+  ],
+  "properties": {
+    "schema": { "const": "quiet-trace/records-page/v1" },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "./aggregate-record-v1.schema.json"
+      }
+    },
+    "paging": {
+      "type": "object",
+      "required": ["after", "next_after", "limit", "has_more"],
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "next_after": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "has_more": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "has_more": { "const": true } },
+            "required": ["has_more"]
+          },
+          "then": { "properties": { "next_after": { "type": "integer" } } }
+        },
+        {
+          "if": {
+            "properties": { "has_more": { "const": false } },
+            "required": ["has_more"]
+          },
+          "then": { "properties": { "next_after": { "type": "null" } } }
+        }
+      ]
+    },
+    "generated_at": {
+      "type": ["string", "null"],
+      "pattern": "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})Z$"
+    },
+    "clock_quality": {
+      "enum": ["unknown", "monotonic_only", "host_set", "synced"]
+    },
+    "quality_flags": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,47}$"
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": true
+}

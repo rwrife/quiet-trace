@@ -1,10 +1,28 @@
-# Quiet Trace dashboard scaffold
+# Quiet Trace local dashboard
 
-A device-hosted TypeScript/Vite shell for the local aggregate-only dashboard. The default route is disconnected and never invents production sensor behavior. Add `?fixture=1` explicitly to display deterministic fixture data; the page labels that data as synthetic and uncalibrated.
+A device-hosted TypeScript/Vite dashboard for aggregate-only monitoring and
+local data operations. By default, the app attempts local device endpoints.
+Use `?fixture=1` for deterministic synthetic data (clearly labeled fixture mode).
 
-## Pinned setup
+## Implemented scope (issue #5)
 
-Use Node.js `22.23.1` and npm `10.9.8`:
+- Setup/connection/recovery guidance (including USB serial fallback)
+- Live aggregate status and quality signal cards
+- Paginated history timeline table
+- Session comparison summary
+- Local annotation workflow with bounded text input
+- Versioned JSON/CSV export controls
+- Backup validation + ticketed restore apply flow
+- Retention settings and selective delete operations
+- Factory erase UX requiring typed `ERASE` + physical confirmation checkbox
+- Privacy + permissions disclosures with explicit aggregate-only boundary
+
+## Pinned toolchain
+
+- Node.js `22.23.1`
+- npm `10.9.8`
+
+## Verification commands
 
 ```bash
 npm ci
@@ -12,15 +30,23 @@ npm run format:check
 npm run lint
 npm run typecheck
 npm run test:run
+npm run test:accessibility
 npm run build
+npm run check:bundle-size
+npm run check:firmware-contract
 ```
 
-For local development:
+## Security/privacy notes
 
-```bash
-npm run dev
-```
+- Raw microphone/PCM payloads are treated as forbidden contract fields and are
+  rejected by semantic validators.
+- Export payloads are aggregate-only and intentionally exclude credentials,
+  Wi-Fi passwords, browser tokens, and firmware secrets.
+- Device mode is local-network only. Fixture mode never implies calibrated
+  real-world measurements.
 
-No cloud account, analytics, phone/computer microphone, camera, contacts, location, notification, or background permission belongs in this app. The browser consumes only versioned aggregate/configuration contracts. Wi-Fi credentials and device/browser secrets are excluded from exports and fixtures.
+## Evidence boundary
 
-Current tests cover the aggregate-only forbidden-field boundary and the explicit fixture-mode gate. They are fixture/static evidence, not browser-platform, firmware, microphone, calibration, bench, or field evidence.
+Automated tests in this package are software/fixture evidence. They do **not**
+prove physical microphone behavior, hardware calibration traceability, or
+mobile/browser-specific runtime behavior on real devices.

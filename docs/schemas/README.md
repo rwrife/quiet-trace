@@ -41,3 +41,17 @@ Every producer and consumer must run both:
 to prove this boundary, then verifies that the semantic implementations reject
 the same invalid records. Adding another cross-field or aggregate invariant
 requires updating the schema metadata, both implementations, and parity tests.
+
+## Dashboard API payload schemas (issue #5)
+
+The dashboard also validates two versioned transport envelopes:
+
+- `status-v1.schema.json` for `/api/v1/status`
+- `records-page-v1.schema.json` for paginated `/api/v1/records`
+
+Fixtures are committed under `docs/schemas/fixtures/` and are validated in
+`app/tests/protocol-schema.test.ts` with AJV + TypeScript semantic parsers.
+
+Unknown additive top-level fields are tolerated for forward compatibility
+(the parser exposes them in `extensions`), but schema/version mismatch and
+aggregate-content violations are hard failures.

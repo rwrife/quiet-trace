@@ -1,0 +1,64 @@
+{
+  "schema": "quiet-trace/records-page/v1",
+  "records": [
+    {
+      "schema": "quiet-trace/aggregate/v1",
+      "sequence": 42,
+      "interval_start": null,
+      "monotonic_start_ms": 2520000,
+      "duration_ms": 60000,
+      "level_eq_dbfs": -38.5,
+      "peak_125ms_dbfs": -21.25,
+      "histogram_counts": [0, 0, 8, 64, 192, 152, 56, 8, 0, 0],
+      "calibration": {
+        "state": "uncalibrated",
+        "offset_db": null,
+        "calibrated_at": null,
+        "method": null,
+        "reference_instrument": null,
+        "reference_placement": null,
+        "reference_source": null,
+        "reference_duration_s": null,
+        "firmware_version": null,
+        "hardware_revision": null
+      },
+      "clock_quality": "monotonic_only",
+      "quality_flags": ["uncalibrated", "wall_time_unknown"],
+      "session_id": "fixture-office"
+    },
+    {
+      "schema": "quiet-trace/aggregate/v1",
+      "sequence": 43,
+      "interval_start": "2026-09-07T12:00:00Z",
+      "monotonic_start_ms": 2580000,
+      "duration_ms": 60000,
+      "level_eq_dbfs": -37.9,
+      "peak_125ms_dbfs": -20.85,
+      "histogram_counts": [0, 0, 8, 62, 192, 154, 56, 8, 0, 0],
+      "calibration": {
+        "state": "reference_adjusted",
+        "offset_db": 1.25,
+        "calibrated_at": "2026-09-01T11:00:00Z",
+        "method": "field_reference",
+        "reference_instrument": "Class 2 SLM",
+        "reference_placement": "desktop tripod",
+        "reference_source": "pink_noise_1kHz",
+        "reference_duration_s": 60,
+        "firmware_version": "0.7.1",
+        "hardware_revision": "revA"
+      },
+      "clock_quality": "host_set",
+      "quality_flags": ["calibration_pending"],
+      "session_id": "fixture-office"
+    }
+  ],
+  "paging": {
+    "after": null,
+    "next_after": 43,
+    "limit": 2,
+    "has_more": true
+  },
+  "generated_at": "2026-09-07T12:01:00Z",
+  "clock_quality": "host_set",
+  "quality_flags": []
+}
