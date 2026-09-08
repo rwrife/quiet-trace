@@ -1,6 +1,6 @@
 # Verification matrix
 
-Status: foundation evidence plan. A planned check is not a passed check.
+Status: issue-5 static/simulation gates are passing; issue-6 bench evidence is pending. A planned check is not a passed check.
 
 ## Evidence classes
 

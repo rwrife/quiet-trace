@@ -90,7 +90,7 @@ Prototype planning target: **USD 35–60**, including electronics, simple enclos
 
 ## Current status and milestones
 
-**Status: issue-4 aggregate-only firmware vertical slice implemented for review.** The repository now contains the architecture/privacy/metric contracts, selected schematic/BOM, PCB/mechanical draft, and host-tested firmware domain contracts for acquisition, aggregation, storage recovery, setup/USB control paths, and aggregate/status protocol rendering. Dashboard end-to-end implementation and physical integration evidence remain open in issues #5 and #6. No certification, safety, legal, or bench-calibrated claim is made.
+**Status: issue-5 dashboard/protocol slice is merged; issue-6 physical integration evidence is in progress.** The repository now contains architecture/privacy/metric contracts, selected schematic/BOM, PCB/mechanical draft, host-tested firmware domain contracts, and the merged local dashboard implementation with typed aggregate protocol fixtures. Issue #6 assembly/bring-up/calibration/troubleshooting guides are published, but real bench measurements and end-to-end physical evidence are still required before any calibrated claim. No certification, safety, legal, or bench-calibrated claim is made.
 
 1. Freeze measurable requirements and privacy threat model.
 2. Validate controller/microphone/protection choices from manufacturer datasheets.
@@ -101,6 +101,13 @@ Prototype planning target: **USD 35–60**, including electronics, simple enclos
 7. Publish assembly instructions and inspected fabrication/release outputs.
 
 See [PLAN.md](PLAN.md), [hardware/requirements.md](hardware/requirements.md), and the GitHub issue backlog.
+
+Issue-#6 integration documents:
+- [Assembly guide](docs/integration/assembly-guide.md)
+- [Bring-up checklist](docs/integration/bring-up-checklist.md)
+- [Calibration/reference comparison procedure](docs/integration/calibration-reference-comparison.md)
+- [Troubleshooting guide](docs/integration/troubleshooting.md)
+- [Bench evidence log template](docs/integration/bench-log-template.md)
 
 ## Development quickstart
 
