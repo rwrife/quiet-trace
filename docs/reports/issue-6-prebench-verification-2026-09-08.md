@@ -50,7 +50,7 @@ From `docs/reports/issue-6-prebench-drc-2026-09-08.rpt`:
 - `clearance` violation between `VBUS_RAW` track and `GND` zone
 - one `unconnected_items` entry for F.Cu GND zone
 
-Because this PR only adds issue-#6 integration documentation and verification capture, no PCB geometry/routing was modified here. These DRC findings are preserved as explicit open hardware blockers.
+Because this PR only adds issue-#6 integration documentation and verification capture, no PCB geometry/routing was modified here. These DRC findings are preserved as explicit open hardware blockers. A follow-up feasibility analysis with measured pad/keepout geometry and scripted repair attempts is recorded in [`issue-6-drc-geometry-analysis-2026-09-12.md`](issue-6-drc-geometry-analysis-2026-09-12.md).
 
 ## Published issue-#6 integration docs in this change
 
