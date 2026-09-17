@@ -1,6 +1,7 @@
 idf_component_register(
   SRCS
     "aggregate_contract.cpp"
+    "aggregate_projection.cpp"
     "acquisition_pipeline.cpp"
     "record_ring.cpp"
     "control_plane.cpp"

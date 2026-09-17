@@ -6,6 +6,7 @@ enable_testing()
 set(
   QUIET_TRACE_DOMAIN_SRCS
   ../components/domain/aggregate_contract.cpp
+  ../components/domain/aggregate_projection.cpp
   ../components/domain/acquisition_pipeline.cpp
   ../components/domain/record_ring.cpp
   ../components/domain/control_plane.cpp
@@ -76,3 +77,17 @@ target_include_directories(
   PRIVATE ../components/domain/include
 )
 add_test(NAME control_plane COMMAND control_plane_test)
+
+add_executable(
+  target_projection_test
+  target_projection_test.cpp
+  ${QUIET_TRACE_DOMAIN_SRCS}
+  ../components/target/target_core.cpp
+)
+target_compile_features(target_projection_test PRIVATE cxx_std_20)
+target_compile_options(target_projection_test PRIVATE ${QUIET_TRACE_WARNING_FLAGS})
+target_include_directories(
+  target_projection_test
+  PRIVATE ../components/domain/include ../components/target/include
+)
+add_test(NAME target_projection COMMAND target_projection_test)
