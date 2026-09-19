@@ -34,6 +34,7 @@ Every change initially runs:
 1. Dashboard exact-lock install, Prettier check, ESLint, TypeScript, Vitest, and Vite production build.
 2. Host C++ configure/build with warnings as errors and CTest.
 3. ESP-IDF v6.1 ESP32-S3 configure/build in the pinned toolchain image.
+4. Hardware static gate in the pinned KiCad image: ERC with zero errors/warnings, netlist/PCB pad-net cross-checks, a DRC exception-baseline signature gate (the five documented revision-A exceptions must be exactly present, unchanged — no new, removed, or moved violations), and a byte-identical BOM re-export against `bom/bom.csv`.
 
 These are static/synthetic checks only. They do not establish selected hardware, microphone input, calibration, acoustic accuracy, flash endurance, Wi-Fi interoperability, or physical USB behavior.
 

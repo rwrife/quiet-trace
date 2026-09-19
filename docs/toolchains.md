@@ -87,6 +87,32 @@ cmake --build /tmp/quiet-trace-host-tests --parallel
 ctest --test-dir /tmp/quiet-trace-host-tests --output-on-failure
 ```
 
+## Hardware (KiCad)
+
+CI runs the hardware static gate in the official KiCad image pinned by digest:
+`kicad/kicad@sha256:e638b79b0321f29395a5b783e94bb9f3c73303e8da15da27b8f5cb4b67a37729`
+(`kicad/kicad:9.0.9`, amd64). The immutable digest, not the moving tag, is
+authoritative. The job seeds the packaged default `sym-lib-table`/`fp-lib-table`
+into an ephemeral `HOME` (same procedure documented in
+`docs/verification/issue-2-schematic.md`), then runs:
+
+1. `kicad-cli sch erc` — must report 0 errors and 0 warnings.
+2. `kicad-cli sch export netlist` (kicadxml and kicadsexpr) into `ci-scratch/`.
+3. `python3 hardware/kicad/verify_netlist.py` and `verify_pcb.py` (stdlib-only pad/net cross-checks).
+4. `kicad-cli pcb drc` — expected to exit non-zero while the documented revision-A exceptions are open; `python3 hardware/kicad/verify_drc_baseline.py` then compares the report signature against `hardware/kicad/drc-exceptions-baseline.json`. Any new, removed, or moved violation fails the gate.
+5. `python3 hardware/kicad/export_bom.py` and a byte comparison of the export against the tracked `bom/bom.csv`.
+
+The DRC baseline JSON is an exception ledger for the USB-C fanout layout pass
+documented in `docs/reports/issue-6-drc-geometry-analysis-2026-09-12.md`; it may
+only be regenerated as part of that layout pass with review, never simply to
+make CI green.
+
+Local runs require Docker (or Podman) with the `kicad-cli` entry point, or a
+native KiCad 9 install; the repo-local `kicad-cli` helper wrapper used during
+early issue work is not a CI dependency. KiCad 9.0.9 is the baseline engine:
+9.0.2 emits two additional `lib_symbol_mismatch` ERC warnings and 9.0.6 emits
+four additional `hole_clearance` DRC violations, so pinning matters.
+
 ## Evidence limit
 
 A successful host, app, or ESP-IDF build is static/synthetic evidence. It is not proof of a selected microphone, fabricated PCB, audio framing, RF/acoustic behavior, calibration, USB electrical behavior, flash endurance, or physical bring-up.

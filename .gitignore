@@ -52,3 +52,6 @@ hardware/kicad/*.xml
 # Fabrication/release outputs are generated and attached to releases
 hardware/fabrication/
 release/
+
+# Hardware static CI scratch output
+ci-scratch/
