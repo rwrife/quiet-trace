@@ -134,8 +134,14 @@ jobs:
               set -euo pipefail
               # Seed the packaged default library tables into an ephemeral HOME so
               # ERC resolves the stock KiCad footprints/symbols (documented in
-              # docs/verification/issue-2-schematic.md).
+              # docs/verification/issue-2-schematic.md). The template tables use
+              # ${KICAD9_SYMBOL_DIR}/${KICAD9_FOOTPRINT_DIR}, which only the KiCad
+              # GUI normally defines, so export them explicitly.
               mkdir -p "$HOME/.config/kicad/9.0"
+              test -d /usr/share/kicad/symbols
+              test -d /usr/share/kicad/footprints
+              export KICAD9_SYMBOL_DIR=/usr/share/kicad/symbols
+              export KICAD9_FOOTPRINT_DIR=/usr/share/kicad/footprints
               SYM_LIB=$(find /usr/share/kicad -name sym-lib-table -path "*template*" | head -1)
               FP_LIB=$(find /usr/share/kicad -name fp-lib-table -path "*template*" | head -1)
               test -n "$SYM_LIB"; test -n "$FP_LIB"
