@@ -132,21 +132,22 @@ jobs:
             --entrypoint bash \
             "$KICAD_IMAGE" -c '
               set -euo pipefail
-              # Seed the packaged default library tables into an ephemeral HOME so
-              # ERC resolves the stock KiCad footprints/symbols (documented in
-              # docs/verification/issue-2-schematic.md). The template tables use
-              # ${KICAD9_SYMBOL_DIR}/${KICAD9_FOOTPRINT_DIR}, which only the KiCad
-              # GUI normally defines, so export them explicitly.
-              mkdir -p "$HOME/.config/kicad/9.0"
-              test -d /usr/share/kicad/symbols
-              test -d /usr/share/kicad/footprints
-              export KICAD9_SYMBOL_DIR=/usr/share/kicad/symbols
-              export KICAD9_FOOTPRINT_DIR=/usr/share/kicad/footprints
-              SYM_LIB=$(find /usr/share/kicad -name sym-lib-table -path "*template*" | head -1)
-              FP_LIB=$(find /usr/share/kicad -name fp-lib-table -path "*template*" | head -1)
-              test -n "$SYM_LIB"; test -n "$FP_LIB"
-              cp "$SYM_LIB" "$HOME/.config/kicad/9.0/sym-lib-table"
-              cp "$FP_LIB" "$HOME/.config/kicad/9.0/fp-lib-table"
+              # Generate project-local library tables with absolute URIs into the
+              # image's packaged libraries. Deterministic across KiCad images
+              # (no ${KICAD*_DIR} env-var or HOME-template resolution needed);
+              # the generated tables are gitignored and not committed to the
+              # hardware sources.
+              mkdir -p ci-scratch
+              for f in /usr/share/kicad/symbols/*.kicad_sym; do
+                b=$(basename "$f" .kicad_sym)
+                printf '  (lib (name "%s")(type "KiCad")(uri "%s")(options "")(descr "system library %s"))\n' "$b" "$f" "$b"
+              done > ci-scratch/sym-lib-table.body
+              printf '(sym_lib_table\n%s)\n' "$(cat ci-scratch/sym-lib-table.body)" > hardware/kicad/sym-lib-table
+              for d in /usr/share/kicad/footprints/*.pretty; do
+                b=$(basename "$d" .pretty)
+                printf '  (lib (name %s)(type KiCad)(uri %s)(options "")(descr "system footprint library %s"))\n' "$b" "$d" "$b"
+              done > ci-scratch/fp-lib-table.body
+              printf '(fp_lib_table\n%s)\n' "$(cat ci-scratch/fp-lib-table.body)" > hardware/kicad/fp-lib-table
               kicad-cli version
               kicad-cli sch erc --exit-code-violations \
                 --severity-error --severity-warning --format report \

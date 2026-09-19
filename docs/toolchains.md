@@ -92,9 +92,10 @@ ctest --test-dir /tmp/quiet-trace-host-tests --output-on-failure
 CI runs the hardware static gate in the official KiCad image pinned by digest:
 `kicad/kicad@sha256:e638b79b0321f29395a5b783e94bb9f3c73303e8da15da27b8f5cb4b67a37729`
 (`kicad/kicad:9.0.9`, amd64). The immutable digest, not the moving tag, is
-authoritative. The job seeds the packaged default `sym-lib-table`/`fp-lib-table`
-into an ephemeral `HOME` (same procedure documented in
-`docs/verification/issue-2-schematic.md`), then runs:
+authoritative. The job generates project-local `sym-lib-table`/`fp-lib-table`
+files in `hardware/kicad/` with absolute URIs into the image's packaged
+libraries (gitignored scratch — no `${KICAD*_DIR}` env-var or HOME-template
+resolution, which the official image does not provide headlessly), then runs:
 
 1. `kicad-cli sch erc` — must report 0 errors and 0 warnings.
 2. `kicad-cli sch export netlist` (kicadxml and kicadsexpr) into `ci-scratch/`.
