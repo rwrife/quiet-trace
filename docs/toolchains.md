@@ -94,8 +94,9 @@ CI runs the hardware static gate in the official KiCad image pinned by digest:
 (`kicad/kicad:9.0.9`, amd64). The immutable digest, not the moving tag, is
 authoritative. The job generates project-local `sym-lib-table`/`fp-lib-table`
 files in `hardware/kicad/` with absolute URIs into the image's packaged
-libraries (gitignored scratch — no `${KICAD*_DIR}` env-var or HOME-template
-resolution, which the official image does not provide headlessly), then runs:
+libraries via `hardware/kicad/make_system_lib_tables.py` (gitignored scratch —
+headless `kicad-cli` does not receive the GUI-defined `${KICAD*_DIR}` variables
+the packaged template tables rely on), then runs:
 
 1. `kicad-cli sch erc` — must report 0 errors and 0 warnings.
 2. `kicad-cli sch export netlist` (kicadxml and kicadsexpr) into `ci-scratch/`.

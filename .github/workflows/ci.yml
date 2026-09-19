@@ -132,22 +132,11 @@ jobs:
             --entrypoint bash \
             "$KICAD_IMAGE" -c '
               set -euo pipefail
-              # Generate project-local library tables with absolute URIs into the
-              # image's packaged libraries. Deterministic across KiCad images
-              # (no ${KICAD*_DIR} env-var or HOME-template resolution needed);
-              # the generated tables are gitignored and not committed to the
-              # hardware sources.
-              mkdir -p ci-scratch
-              for f in /usr/share/kicad/symbols/*.kicad_sym; do
-                b=$(basename "$f" .kicad_sym)
-                printf '  (lib (name "%s")(type "KiCad")(uri "%s")(options "")(descr "system library %s"))\n' "$b" "$f" "$b"
-              done > ci-scratch/sym-lib-table.body
-              printf '(sym_lib_table\n%s)\n' "$(cat ci-scratch/sym-lib-table.body)" > hardware/kicad/sym-lib-table
-              for d in /usr/share/kicad/footprints/*.pretty; do
-                b=$(basename "$d" .pretty)
-                printf '  (lib (name %s)(type KiCad)(uri %s)(options "")(descr "system footprint library %s"))\n' "$b" "$d" "$b"
-              done > ci-scratch/fp-lib-table.body
-              printf '(fp_lib_table\n%s)\n' "$(cat ci-scratch/fp-lib-table.body)" > hardware/kicad/fp-lib-table
+              # Generate project-local library tables with absolute URIs into
+              # the image packaged libraries; headless kicad-cli does not get
+              # the GUI-defined KICAD*_DIR env vars, but project-local tables
+              # are loaded deterministically with no environment setup.
+              python3 hardware/kicad/make_system_lib_tables.py
               kicad-cli version
               kicad-cli sch erc --exit-code-violations \
                 --severity-error --severity-warning --format report \
