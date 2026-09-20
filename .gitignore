@@ -52,3 +52,10 @@ hardware/kicad/*.xml
 # Fabrication/release outputs are generated and attached to releases
 hardware/fabrication/
 release/
+
+# Hardware static CI scratch output
+ci-scratch/
+# fp-lib-table is generated in-image with image-specific absolute paths.
+# sym-lib-table is NOT generated in CI: symbol content is vendored under
+# hardware/kicad/libs/symbols/ (see hardware/kicad/vendor_baseline_symbols.py).
+hardware/kicad/fp-lib-table
