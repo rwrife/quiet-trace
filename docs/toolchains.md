@@ -92,11 +92,29 @@ ctest --test-dir /tmp/quiet-trace-host-tests --output-on-failure
 CI runs the hardware static gate in the official KiCad image pinned by digest:
 `kicad/kicad@sha256:e638b79b0321f29395a5b783e94bb9f3c73303e8da15da27b8f5cb4b67a37729`
 (`kicad/kicad:9.0.9`, amd64). The immutable digest, not the moving tag, is
-authoritative. The job generates project-local `sym-lib-table`/`fp-lib-table`
-files in `hardware/kicad/` with absolute URIs into the image's packaged
-libraries via `hardware/kicad/make_system_lib_tables.py` (gitignored scratch —
-headless `kicad-cli` does not receive the GUI-defined `${KICAD*_DIR}` variables
-the packaged template tables rely on), then runs:
+authoritative. The job generates a project-local `fp-lib-table` in
+`hardware/kicad/` with absolute URIs into the image's packaged footprints via
+`hardware/kicad/make_system_lib_tables.py` (gitignored scratch — headless
+`kicad-cli` does not receive the GUI-defined `${KICAD*_DIR}` variables the
+packaged template tables rely on). Symbol resolution is **not** generated in
+CI: the schematic's exact symbol content is vendored in-repo under
+`hardware/kicad/libs/symbols/` and referenced by the tracked
+`hardware/kicad/sym-lib-table` via `${KIPRJMOD}` relative URIs.
+
+Why symbols are vendored: two distributions of the *same* KiCad 9.0.9 engine
+ship different content in the same system libraries. The design was authored
+and ERC-verified against the Debian (PPA) build, whose
+`RF_Module:ESP32-S3-WROOM-1` names module pads 13/14 `IO19`/`IO20` (the
+netlist verifier asserts these pin functions) and whose `Device:LED` has no
+`Sim.Pins` property. The official `kicad/kicad` image snapshot renames those
+pads `USB_D-`/`USB_D+` and adds `Sim.Pins`, so resolving against image
+snapshot libraries emits two spurious `lib_symbol_mismatch` ERC warnings and
+would also export different pin names. Vendoring makes the ERC cache check
+and the netlist pin names independent of image library snapshots; regeneration
+is a reviewed library-uplift action via
+`hardware/kicad/vendor_baseline_symbols.py`, never a CI step.
+
+The job then runs:
 
 1. `kicad-cli sch erc` — must report 0 errors and 0 warnings.
 2. `kicad-cli sch export netlist` (kicadxml and kicadsexpr) into `ci-scratch/`.

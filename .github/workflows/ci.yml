@@ -132,10 +132,14 @@ jobs:
             --entrypoint bash \
             "$KICAD_IMAGE" -c '
               set -euo pipefail
-              # Generate project-local library tables with absolute URIs into
-              # the image packaged libraries; headless kicad-cli does not get
-              # the GUI-defined KICAD*_DIR env vars, but project-local tables
-              # are loaded deterministically with no environment setup.
+              # Footprints: generate a project-local fp-lib-table with absolute
+              # URIs into the image's packaged footprints (headless kicad-cli
+              # does not get the GUI-defined KICAD*_DIR env vars). Symbols: NOT
+              # generated — symbol content is vendored in-repo
+              # (hardware/kicad/libs/symbols + tracked sym-lib-table) because
+              # different distributions of the same KiCad version ship
+              # different system symbol content, which produced spurious
+              # lib_symbol_mismatch ERC warnings against image snapshot libs.
               python3 hardware/kicad/make_system_lib_tables.py
               kicad-cli version
               kicad-cli sch erc --exit-code-violations \
